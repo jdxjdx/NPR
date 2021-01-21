@@ -1,10 +1,9 @@
-﻿Shader "Unlit/NormalExpandOutline"
+﻿Shader "NPR/NormalExpandOutline"
 {
     Properties
     {
 	    _OutlineWidth ("Outline Width", Range(0.01, 1)) = 0.24
         _OutLineColor ("OutLine Color", Color) = (0.5,0.5,0.5,1)
-
     }
     SubShader
     {
@@ -12,8 +11,6 @@
 
         pass
         {
-
-            
             Tags {"LightMode"="ForwardBase"}
 
             Cull Back
@@ -66,12 +63,17 @@
             v2f vert (a2v v) 
 	        {
                 v2f o;
-
-            	// 顶点沿着法线方向外扩 立方体显示不正确
-            	 o.pos = UnityObjectToClipPos(float4(v.vertex.xyz + v.normal * _OutlineWidth * 0.1 ,1));//顶点沿着法线方向外扩
                
-		
-                //加噪声变化和随摄像机不变化参靠https://zhuanlan.zhihu.com/p/95986273
+                //方法一：将法线转换到投影空间，在投影阶段进行偏移
+                //有断裂
+            	float4 pos = mul(UNITY_MATRIX_MV, v.vertex);
+                float3 normal = mul(UNITY_MATRIX_MV, v.normal);
+            	//调整法线z坐标，防止遮挡正面渲染
+	             normal.z = -0.5;
+	             pos = pos + float4(normalize(normal), 0) * _OutlineWidth;
+	             o.pos = mul(UNITY_MATRIX_P, pos);
+                    
+				 //加噪声变化和随摄像机不变化参靠https://zhuanlan.zhihu.com/p/95986273
                 
                 return o;
             }

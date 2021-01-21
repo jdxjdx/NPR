@@ -64,9 +64,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\NewBehaviourScript.cs" />
-    <None Include="Assets\Shaders\NormalCPExpandOutline_1.shader" />
-    <None Include="Assets\Shaders\NormalExpandOutline.shader" />
-    <None Include="Assets\Shaders\NormalCPExpandOutline.shader" />
+    <None Include="Assets\Shaders\NPRtest\NoRampNPRShader.shader" />
+    <None Include="Assets\Shaders\Outline\NormalCPExpandOutline_1.shader" />
+    <None Include="Assets\Shaders\Outline\NormalExpandOutline.shader" />
+    <None Include="Assets\Shaders\Outline\NormalCPExpandOutline.shader" />
+    <None Include="Assets\Shaders\NPRtest\RampNPRShader.shader" />
     <Reference Include="Unity.DocZh.Editor">
       <HintPath>E:/NPR/NPR/Library/ScriptAssemblies/Unity.DocZh.Editor.dll</HintPath>
     </Reference>

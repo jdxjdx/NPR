@@ -1,10 +1,9 @@
-﻿Shader "Unlit/NormalExpandOutline_1"
+﻿Shader "NPR/NormalExpandOutline_1"
 {
     Properties
     {
 	    _OutlineWidth ("Outline Width", Range(0.01, 1)) = 0.24
         _OutLineColor ("OutLine Color", Color) = (0.5,0.5,0.5,1)
-
     }
     SubShader
     {
@@ -12,8 +11,6 @@
 
         pass
         {
-
-            
             Tags {"LightMode"="ForwardBase"}
 
             Cull Back
