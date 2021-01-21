@@ -1,2 +1,7 @@
 NPR/Library/
 NPR/Temp/
+*.xml
+NPR/.idea/.idea.NPR/.idea/riderModule.iml
+NPR/Assets/Plugins/Editor/JetBrains/
+NPR/Assets/Plugins/Editor/JetBrains.meta
+NPR/obj/Debug/
