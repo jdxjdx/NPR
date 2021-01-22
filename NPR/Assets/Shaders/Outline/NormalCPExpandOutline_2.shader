@@ -1,4 +1,4 @@
-﻿Shader "NPR/NormalExpandOutline_1"
+﻿Shader "NPR/NormalExpandOutline_2"
 {
     Properties
     {
@@ -66,10 +66,10 @@
                
                 //将顶点坐标作为方向矢量，转换到投影空间，以此为基础偏移
                 //没有断裂
-                float3 dir = normalize(v.vertex.xyz);
-				float4 newPos = v.vertex;
-				newPos.xyz += dir * _OutlineWidth * 0.02;
-				o.pos = UnityObjectToClipPos(newPos);
+                o.pos = UnityObjectToClipPos(v.vertex.xyz);
+                float3 normal = normalize(mul((float3x3)UNITY_MATRIX_IT_MV, v.normal));
+                float2 offset = TransformViewToProjection(normal.xy);
+                o.pos.xy += offset * o.pos.z * _OutlineWidth;
                 
                 return o;
             }

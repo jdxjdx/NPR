@@ -6,11 +6,7 @@
         _OutLineColor ("OutLine Color", Color) = (0.5,0.5,0.5,1)
         
         _MainTex ("Texture", 2D) = "white" {}
-        _Diffuse("Diffuse", Color) = (1,1,1,1)
-        
-        _Specular("Specular", Color) = (1,1,1,1)
-        _SpecularScale("Specular Scale", Range(0, 1)) = 0.01
-        _Gloss("Gloss", Range(8.0, 256)) = 20
+        _DiffuseColor("Diffuse Color", Color) = (1,1,1,1)
 	    
 	    _ShadowColor ("Shadow Color", Color) = (0.7, 0.7, 0.8)
 		_ShadowRange ("Shadow Range", Range(0, 1)) = 0.5
@@ -36,11 +32,9 @@
 
             sampler2D _MainTex;float4 _MainTex_ST;
             
-            fixed4 _Diffuse;
-            fixed4 _Specular;
-            float _Gloss;
-            float4 _Color;
-            float _SpecularScale;
+            fixed4 _DiffuseColor;
+            fixed4 _SpecularColor;
+
 			half3 _ShadowColor;
             half _ShadowRange;
             half _ShadowSmooth;
@@ -50,13 +44,13 @@
             {
                 float4 vertex : POSITION;
                 fixed3 normal : NORMAL;
-                float2 texcoord : TEXCOORD0;//纹理坐标
+                float2 texcoord : TEXCOORD0;
             };
 
             struct v2f
             {
                 float4 pos : SV_POSITION;
-                float2 texcoord : TEXCOORD0;//纹理坐标
+                float2 texcoord : TEXCOORD0;
                 float3 worldPos : TEXCOORD1;
                 fixed3 worldNormal : TEXCOORD2;
             };
@@ -79,19 +73,19 @@
 
 	            float3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
 
-	        	float4 texColor = tex2D(_MainTex,TRANSFORM_TEX(i.texcoord, _MainTex));
+	        	float4 mainTex = tex2D(_MainTex,TRANSFORM_TEX(i.texcoord, _MainTex));
 
-	        	fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * texColor.rgb;
+	        	fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * mainTex.rgb;
 
 	        	fixed NDotL = dot(normalDir, worldLightDir);
 
-	        	fixed halfLambat = NDotL*0.5 + 0.5;
+	        	fixed halfLambert = NDotL*0.5 + 0.5;
 
-	        	fixed ramp = smoothstep(0, _ShadowSmooth, halfLambat - _ShadowRange);
+	        	fixed ramp = smoothstep(0, _ShadowSmooth, halfLambert - _ShadowRange);
 
-	        	fixed3 diffuseColor = lerp(_ShadowColor, _Diffuse, ramp);
+	        	fixed3 diffuseColor = lerp(_ShadowColor, _DiffuseColor, ramp);
 
-	        	fixed3 diffuse = texColor.rgb * _LightColor0.rgb * _Diffuse.rgb * diffuseColor.rgb;
+	        	fixed3 diffuse = mainTex.rgb * _LightColor0.rgb * _DiffuseColor.rgb * diffuseColor.rgb;
 
 	        	fixed3 color = ambient + diffuse;
 	            

@@ -70,10 +70,8 @@
                 float3 normal = mul(UNITY_MATRIX_MV, v.normal);
             	//调整法线z坐标，防止遮挡正面渲染
 	             normal.z = -0.5;
-	             pos = pos + float4(normalize(normal), 0) * _OutlineWidth;
+	             pos = pos + float4(normalize(normal), 0) * _OutlineWidth * 0.02;
 	             o.pos = mul(UNITY_MATRIX_P, pos);
-                    
-				 //加噪声变化和随摄像机不变化参靠https://zhuanlan.zhihu.com/p/95986273
                 
                 return o;
             }

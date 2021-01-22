@@ -6,11 +6,7 @@
         _OutLineColor ("OutLine Color", Color) = (0.5,0.5,0.5,1)
         
         _MainTex ("Texture", 2D) = "white" {}
-        _Diffuse("Diffuse", Color) = (1,1,1,1)
-        
-        _Specular("Specular", Color) = (1,1,1,1)
-        _SpecularScale("Specular Scale", Range(0, 1)) = 0.01
-        _Gloss("Gloss", Range(8.0, 256)) = 20
+        _DiffuseColor("Diffuse Color", Color) = (1,1,1,1)
         
 	    _Ramp("Ramp Texture", 2D) = "bump"{}
     }
@@ -35,11 +31,8 @@
             sampler2D _MainTex;float4 _MainTex_ST;
             sampler2D _Ramp;float4 _Ramp_ST;
             
-            fixed4 _Diffuse;
-            fixed4 _Specular;
-            float _Gloss;
+            fixed4 _DiffuseColor;
             float4 _Color;
-            float _SpecularScale;
            
 
             struct a2v
@@ -75,15 +68,15 @@
 
 	            float3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
 
-	        	float4 texColor = tex2D(_MainTex,TRANSFORM_TEX(i.texcoord, _MainTex));
+	        	float4 mainTex = tex2D(_MainTex,TRANSFORM_TEX(i.texcoord, _MainTex));
 
-	        	fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * texColor.rgb;
+	        	fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * mainTex.rgb;
 
 	        	fixed NDotL = dot(normalDir, worldLightDir);
 
-	        	fixed halfLambat = NDotL*0.5 + 0.5;
+	        	fixed halfLambert = NDotL*0.5 + 0.5;
 
-	        	fixed3 diffuse = texColor.rgb * _LightColor0.rgb * _Diffuse.rgb * tex2D(_Ramp, float2(halfLambat, halfLambat)).rgb;
+	        	fixed3 diffuse = mainTex.rgb * _LightColor0.rgb * _DiffuseColor.rgb * tex2D(_Ramp, float2(halfLambert, halfLambert)).rgb;
 
 	        	fixed3 color = ambient + diffuse;
 	            
