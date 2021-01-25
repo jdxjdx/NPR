@@ -65,10 +65,12 @@
   <ItemGroup>
     <Compile Include="Assets\NewBehaviourScript.cs" />
     <None Include="Assets\Shaders\Cel_Shader_Body.shader" />
+    <None Include="Assets\Shaders\Cel_Shader_Body_Use_RampTexture.shader" />
     <None Include="Assets\Shaders\Outline\NormalCPExpandOutline_2.shader" />
     <None Include="Assets\Shaders\NPRtest\NoRampNPRShader.shader" />
     <None Include="Assets\Shaders\Outline\NormalCPExpandOutline_1.shader" />
     <None Include="Assets\Shaders\Outline\NormalExpandOutline.shader" />
+    <None Include="Assets\Shaders\Cel_Shader_Hair.shader" />
     <None Include="Assets\Shaders\Outline\NormalCPExpandOutline.shader" />
     <None Include="Assets\Shaders\NPRtest\RampNPRShader.shader" />
     <Reference Include="Unity.DocZh.Editor">

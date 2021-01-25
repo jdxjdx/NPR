@@ -1,4 +1,4 @@
-﻿Shader "NPR/Cel_Shader_Body"
+﻿Shader "NPR/Cel_Shader_Body_Use_RampTexture"
 {
     Properties
     {
@@ -34,9 +34,7 @@
 		_RimAmount("Rim Amount", Range(0, 1)) = 0.042
 		_RimThreshold("Rim Threshold", Range(0, 10)) = 6
     	
-        //使用称为ilmTexture的贴图对角色明暗区域实现手绘风格的控制
-    	//其中G绿通道控制漫反射的阴影阈值，R红通道控制高光强度，B蓝通道控制高光范围
-    	_IlmTex ("IlmTex", 2D) = "white" {}
+	    _Ramp("Ramp Texture", 2D) = "bump"{}
     }
     SubShader
     {
@@ -57,7 +55,7 @@
             #include "AutoLight.cginc"
 
             sampler2D _MainTex;float4 _MainTex_ST;
-            sampler2D _IlmTex; float4 _IlmTex_ST;
+            sampler2D _Ramp;float4 _Ramp_ST;
             
             fixed4 _DiffuseColor;
             
@@ -105,24 +103,20 @@
 	            float3 viewDir = normalize(UnityWorldSpaceViewDir(i.worldPos));
 	            float3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
 	        	float4 mainTex = tex2D(_MainTex,TRANSFORM_TEX(i.texcoord, _MainTex));
-	        	float4 ilmTex = tex2D(_IlmTex,TRANSFORM_TEX(i.texcoord, _IlmTex));
 	        	
 	        	//diffuse
 	        	fixed3 diffuse = fixed3(0,0,0);;
 	        	fixed NdotL = dot(normalDir, worldLightDir);
 	        	fixed halfLambert = NdotL * 0.5 + 0.5;
-	        	half threshold = (halfLambert + ilmTex.g) * 0.5;
-				half ramp = saturate(_ShadowRange  - threshold);
-				ramp = smoothstep(0, _ShadowSmooth, ramp);
-	        	diffuse = lerp(mainTex, _ShadowColor * mainTex * (1 - _ShadowPower), ramp) * _DiffuseColor.rgb;
+	        	diffuse = mainTex.rgb * _DiffuseColor.rgb * tex2D(_Ramp, float2(halfLambert, halfLambert)).rgb;
 	        	
 	        	//specular
 	        	fixed3 specular = fixed3(0,0,0);
-				fixed3 halfDir = normalize(worldLightDir + viewDir);
-				fixed NdotH = saturate(dot(normalDir, halfDir));
-				fixed SpecularIntensity = pow(NdotH, _SpecularGloss);
-	        	fixed specularRange = step(1 - ilmTex.b * _SpecularScale, SpecularIntensity);
-				specular = mainTex * ilmTex.r * _SpecularColor.rgb * specularRange;
+                fixed3 halfDir = normalize(worldLightDir + viewDir);
+                float spec = dot(normalDir, halfDir);
+                float w = fwidth(spec) * 2.0;
+                spec = lerp(0, 1, smoothstep(-w, w, spec + _SpecularScale - 1)) * step(0.0001, _SpecularScale);
+				specular = _SpecularColor.rgb * spec * mainTex;
 
 				fixed3 rim = fixed3(0,0,0);
 				#ifdef _SELECTED_ON

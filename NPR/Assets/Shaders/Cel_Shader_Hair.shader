@@ -1,4 +1,4 @@
-﻿Shader "NPR/Cel_Shader_Body"
+﻿Shader "NPR/Cel_Shader_Hair"
 {
     Properties
     {
@@ -111,8 +111,7 @@
 	        	fixed3 diffuse = fixed3(0,0,0);;
 	        	fixed NdotL = dot(normalDir, worldLightDir);
 	        	fixed halfLambert = NdotL * 0.5 + 0.5;
-	        	half threshold = (halfLambert + ilmTex.g) * 0.5;
-				half ramp = saturate(_ShadowRange  - threshold);
+				half ramp = saturate(_ShadowRange  - halfLambert);
 				ramp = smoothstep(0, _ShadowSmooth, ramp);
 	        	diffuse = lerp(mainTex, _ShadowColor * mainTex * (1 - _ShadowPower), ramp) * _DiffuseColor.rgb;
 	        	
@@ -121,8 +120,8 @@
 				fixed3 halfDir = normalize(worldLightDir + viewDir);
 				fixed NdotH = saturate(dot(normalDir, halfDir));
 				fixed SpecularIntensity = pow(NdotH, _SpecularGloss);
-	        	fixed specularRange = step(1 - ilmTex.b * _SpecularScale, SpecularIntensity);
-				specular = mainTex * ilmTex.r * _SpecularColor.rgb * specularRange;
+	        	fixed specularRange = step(1 -  _SpecularScale, SpecularIntensity);
+				specular = mainTex * ilmTex.g * _SpecularColor.rgb * specularRange;
 
 				fixed3 rim = fixed3(0,0,0);
 				#ifdef _SELECTED_ON

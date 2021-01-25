@@ -75,11 +75,11 @@ Material:
     - _Parallax: 0.02
     - _RimAmount: 0.042
     - _RimThreshold: 6
-    - _ShadowPower: 0.8
-    - _ShadowRange: 0.5
-    - _ShadowSmooth: 0.2
+    - _ShadowPower: 0
+    - _ShadowRange: 0.2
+    - _ShadowSmooth: 0
     - _SmoothnessTextureChannel: 0
-    - _SpecularGloss: 125.3
+    - _SpecularGloss: 141.1
     - _SpecularHighlights: 1
     - _SpecularScale: 1
     - _SrcBlend: 1

@@ -76,7 +76,7 @@ Material:
     - _RimAmount: 0.239
     - _RimThreshold: 4.15
     - _ShadowPower: 0.26
-    - _ShadowRange: 0.499
+    - _ShadowRange: 0.488
     - _ShadowSmooth: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularGloss: 20
